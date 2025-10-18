@@ -111,7 +111,7 @@
 
         <!-- Section des résultats -->
         <div>
-            <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200 text-center mb-6">Simulation du run</h2>
+            <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200 text-center mb-6">Simulation de votre run</h2>
             
             <div id="results" class="space-y-3">
                 <!-- Les résultats seront injectés ici par JavaScript -->
@@ -132,9 +132,7 @@
         const TOMATOES_PER_BATCH = 3;
         const PIZZAS_PER_BATCH = 2;
         const WEIGHT_PER_BATCH = (EMMENTAL_PER_BATCH * WEIGHT_EMMENTAL) + (TOMATOES_PER_BATCH * WEIGHT_TOMATO);
-        const PRICE_PER_PIZZA = 15;
         const MY_PROFIT_PER_PIZZA = 10;
-        const COMPANY_CUT_PER_PIZZA = 5;
 
         // --- Éléments du DOM ---
         const userCapacityInput = document.getElementById('userCapacity');
@@ -186,8 +184,6 @@
             const totalHarvestWeight = maxBatches * WEIGHT_PER_BATCH;
             
             const myTotalProfit = maxPizzas * MY_PROFIT_PER_PIZZA;
-            const companyTotalCut = maxPizzas * COMPANY_CUT_PER_PIZZA;
-            const totalRevenue = maxPizzas * PRICE_PER_PIZZA;
 
             // --- Mise à jour de l'affichage ---
             resultsDiv.innerHTML = `
@@ -209,14 +205,6 @@
                         <span class="text-green-800 dark:text-green-300 font-medium">💰 Mon gain</span>
                         <span class="font-bold text-lg text-green-700 dark:text-green-200">${myTotalProfit.toLocaleString()} $</span>
                     </div>
-                    <div class="p-4 rounded-xl bg-red-100/50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/20 flex items-center justify-between">
-                        <span class="text-red-800 dark:text-red-300 font-medium">🏢 Part de l'entreprise</span>
-                        <span class="font-bold text-lg text-red-700 dark:text-red-200">${companyTotalCut.toLocaleString()} $</span>
-                    </div>
-                    <div class="p-4 rounded-xl bg-blue-100/50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/20 flex items-center justify-between">
-                        <span class="text-blue-800 dark:text-blue-300 font-medium">📈 Chiffre d'affaires</span>
-                        <span class="font-bold text-lg text-blue-700 dark:text-blue-200">${totalRevenue.toLocaleString()} $</span>
-                    </div>
                 </div>
             `;
             
@@ -233,8 +221,4 @@
     </script>
 </body>
 </html>
-
-
-
-
 
