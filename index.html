@@ -94,7 +94,7 @@
 
         <!-- Section des résultats -->
         <div>
-            <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200 text-center mb-6">Simulation de votre run</h2>
+            <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200 text-center mb-6">Simulation de votre journée</h2>
             
             <div id="results" class="space-y-3">
                 <!-- Les résultats seront injectés ici par JavaScript -->
@@ -104,9 +104,53 @@
                 <p class="text-sm text-gray-600 dark:text-gray-400">Poids total transporté : <strong id="totalWeight" class="font-bold text-gray-800 dark:text-gray-200"></strong> sur <strong id="totalCapacity" class="font-bold text-gray-800 dark:text-gray-200"></strong> kg</p>
             </div>
 
+            <!-- Bouton pour afficher la modale des lieux -->
+            <div class="mt-8 text-center">
+                <button id="showLocationsBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-xl transition-transform transform hover:scale-105 shadow-lg">
+                    Afficher les lieux de stationnement
+                </button>
+            </div>
+
         </div>
 
     </div>
+
+    <!-- Modale pour les lieux de stationnement -->
+    <div id="locationsModal" class="fixed inset-0 bg-black bg-opacity-70 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 w-full max-w-5xl transform transition-all duration-300 scale-95 opacity-0" id="modal-content">
+            <div class="flex justify-between items-center mb-5 border-b border-gray-200 dark:border-gray-700 pb-3">
+                <h3 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Lieux de Stationnement</h3>
+                <button id="closeModalBtn" class="text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 text-3xl font-light">&times;</button>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                <div class="text-center">
+                    <img src="https://raw.githubusercontent.com/Zikman24/pizza/main/stationnement_emental.png" alt="Dépôt d'Emmental" class="rounded-lg shadow-md aspect-video object-cover w-full">
+                    <p class="text-center mt-2 font-semibold text-gray-700 dark:text-gray-300">Emmental</p>
+                </div>
+                <div class="text-center">
+                    <img src="https://raw.githubusercontent.com/Zikman24/pizza/main/stationnement_tomate.png" alt="Champ de Tomates" class="rounded-lg shadow-md aspect-video object-cover w-full">
+                    <p class="text-center mt-2 font-semibold text-gray-700 dark:text-gray-300">Tomates</p>
+                </div>
+                 <div class="text-center">
+                    <img src="https://raw.githubusercontent.com/Zikman24/pizza/main/stationnement_pizzeria.png" alt="Pizzeria autorisée" class="rounded-lg shadow-md aspect-video object-cover w-full">
+                    <p class="text-center mt-2 font-semibold text-gray-700 dark:text-gray-300">Pizzeria</p>
+                </div>
+                <div class="text-center">
+                    <img src="https://raw.githubusercontent.com/Zikman24/pizza/main/stationnement_aeroport.png" alt="Aéroport" class="rounded-lg shadow-md aspect-video object-cover w-full">
+                    <p class="text-center mt-2 font-semibold text-gray-700 dark:text-gray-300">Aéroport</p>
+                </div>
+                <div class="text-center">
+                    <img src="https://raw.githubusercontent.com/Zikman24/pizza/main/stationnement_pizzeria_interdit_1.png" alt="Pizzeria interdite 1" class="rounded-lg shadow-md aspect-video object-cover w-full">
+                    <p class="text-center mt-2 font-semibold text-gray-700 dark:text-gray-300">Pizzeria Interdite 1</p>
+                </div>
+                 <div class="text-center">
+                    <img src="https://raw.githubusercontent.com/Zikman24/pizza/main/stationnement_pizzeria_interdit_2.png" alt="Pizzeria interdite 2" class="rounded-lg shadow-md aspect-video object-cover w-full">
+                    <p class="text-center mt-2 font-semibold text-gray-700 dark:text-gray-300">Pizzeria Interdite 2</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <script>
         // --- Constantes de la recette ---
@@ -128,6 +172,13 @@
         const themeIconLight = document.getElementById('theme-icon-light');
         const themeIconDark = document.getElementById('theme-icon-dark');
         const htmlElement = document.documentElement;
+
+        // --- Éléments de la Modale ---
+        const showLocationsBtn = document.getElementById('showLocationsBtn');
+        const locationsModal = document.getElementById('locationsModal');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const modalContent = document.getElementById('modal-content');
+
 
         // --- Gestion du Thème ---
         function applyTheme(theme) {
@@ -158,6 +209,34 @@
         } else {
             applyTheme(prefersDark ? 'dark' : 'light');
         }
+
+        // --- Gestion de la Modale ---
+        function openModal() {
+            locationsModal.classList.remove('hidden');
+            locationsModal.classList.add('flex');
+            // Léger délai pour permettre à la transition CSS de s'appliquer
+            setTimeout(() => {
+                modalContent.classList.remove('scale-95', 'opacity-0');
+            }, 50);
+        }
+
+        function closeModal() {
+            modalContent.classList.add('scale-95', 'opacity-0');
+            // Attendre la fin de la transition avant de cacher la modale
+            setTimeout(() => {
+                locationsModal.classList.add('hidden');
+                locationsModal.classList.remove('flex');
+            }, 200);
+        }
+
+        showLocationsBtn.addEventListener('click', openModal);
+        closeModalBtn.addEventListener('click', closeModal);
+        locationsModal.addEventListener('click', (event) => {
+            if (event.target === locationsModal) {
+                closeModal();
+            }
+        });
+
 
         // --- Fonction de calcul ---
         function calculateOptimalHarvest() {
