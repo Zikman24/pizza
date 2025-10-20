@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Optimiseur de Pizza</title>
+    <title>Optimiseur de run de Pizza</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Configuration pour Tailwind CSS (pour activer le mode sombre) -->
     <script>
@@ -122,6 +122,19 @@
                 <h3 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Lieux de Stationnement</h3>
                 <button id="closeModalBtn" class="text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 text-3xl font-light">&times;</button>
             </div>
+            
+            <!-- Légende -->
+            <div class="mb-4 flex flex-col sm:flex-row sm:space-x-6 space-y-2 sm:space-y-0 text-sm text-gray-600 dark:text-gray-400">
+                <div class="flex items-center">
+                    <span class="h-4 w-4 bg-green-500 rounded-full mr-2 flex-shrink-0"></span>
+                    <span>Camion (vert)</span>
+                </div>
+                <div class="flex items-center">
+                    <span class="h-4 w-4 bg-red-500 rounded-full mr-2 flex-shrink-0"></span>
+                    <span>Speedo & Toros (rouge)</span>
+                </div>
+            </div>
+
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
                 <div class="text-center">
                     <img src="https://raw.githubusercontent.com/Zikman24/pizza/main/stationnement_emental.png" alt="Dépôt d'Emmental" class="location-image rounded-lg shadow-md aspect-video object-cover w-full cursor-pointer transition-transform duration-300 hover:scale-105">
