@@ -94,7 +94,7 @@
 
         <!-- Section des résultats -->
         <div>
-            <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200 text-center mb-6">Simulation de votre journée</h2>
+            <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200 text-center mb-6">Simulation de votre run</h2>
             
             <div id="results" class="space-y-3">
                 <!-- Les résultats seront injectés ici par JavaScript -->
@@ -124,30 +124,39 @@
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
                 <div class="text-center">
-                    <img src="https://raw.githubusercontent.com/Zikman24/pizza/main/stationnement_emental.png" alt="Dépôt d'Emmental" class="rounded-lg shadow-md aspect-video object-cover w-full">
+                    <img src="https://raw.githubusercontent.com/Zikman24/pizza/main/stationnement_emental.png" alt="Dépôt d'Emmental" class="location-image rounded-lg shadow-md aspect-video object-cover w-full cursor-pointer transition-transform duration-300 hover:scale-105">
                     <p class="text-center mt-2 font-semibold text-gray-700 dark:text-gray-300">Emmental</p>
                 </div>
                 <div class="text-center">
-                    <img src="https://raw.githubusercontent.com/Zikman24/pizza/main/stationnement_tomate.png" alt="Champ de Tomates" class="rounded-lg shadow-md aspect-video object-cover w-full">
+                    <img src="https://raw.githubusercontent.com/Zikman24/pizza/main/stationnement_tomate.png" alt="Champ de Tomates" class="location-image rounded-lg shadow-md aspect-video object-cover w-full cursor-pointer transition-transform duration-300 hover:scale-105">
                     <p class="text-center mt-2 font-semibold text-gray-700 dark:text-gray-300">Tomates</p>
                 </div>
                  <div class="text-center">
-                    <img src="https://raw.githubusercontent.com/Zikman24/pizza/main/stationnement_pizzeria.png" alt="Pizzeria autorisée" class="rounded-lg shadow-md aspect-video object-cover w-full">
+                    <img src="https://raw.githubusercontent.com/Zikman24/pizza/main/stationnement_pizzeria.png" alt="Pizzeria autorisée" class="location-image rounded-lg shadow-md aspect-video object-cover w-full cursor-pointer transition-transform duration-300 hover:scale-105">
                     <p class="text-center mt-2 font-semibold text-gray-700 dark:text-gray-300">Pizzeria</p>
                 </div>
                 <div class="text-center">
-                    <img src="https://raw.githubusercontent.com/Zikman24/pizza/main/stationnement_aeroport.png" alt="Aéroport" class="rounded-lg shadow-md aspect-video object-cover w-full">
+                    <img src="https://raw.githubusercontent.com/Zikman24/pizza/main/stationnement_aeroport.png" alt="Aéroport" class="location-image rounded-lg shadow-md aspect-video object-cover w-full cursor-pointer transition-transform duration-300 hover:scale-105">
                     <p class="text-center mt-2 font-semibold text-gray-700 dark:text-gray-300">Aéroport</p>
                 </div>
                 <div class="text-center">
-                    <img src="https://raw.githubusercontent.com/Zikman24/pizza/main/stationnement_pizzeria_interdit_1.png" alt="Pizzeria interdite 1" class="rounded-lg shadow-md aspect-video object-cover w-full">
+                    <img src="https://raw.githubusercontent.com/Zikman24/pizza/main/stationnement_pizzeria_interdit_1.png" alt="Pizzeria interdite 1" class="location-image rounded-lg shadow-md aspect-video object-cover w-full cursor-pointer transition-transform duration-300 hover:scale-105">
                     <p class="text-center mt-2 font-semibold text-gray-700 dark:text-gray-300">Pizzeria Interdite 1</p>
                 </div>
                  <div class="text-center">
-                    <img src="https://raw.githubusercontent.com/Zikman24/pizza/main/stationnement_pizzeria_interdit_2.png" alt="Pizzeria interdite 2" class="rounded-lg shadow-md aspect-video object-cover w-full">
+                    <img src="https://raw.githubusercontent.com/Zikman24/pizza/main/stationnement_pizzeria_interdit_2.png" alt="Pizzeria interdite 2" class="location-image rounded-lg shadow-md aspect-video object-cover w-full cursor-pointer transition-transform duration-300 hover:scale-105">
                     <p class="text-center mt-2 font-semibold text-gray-700 dark:text-gray-300">Pizzeria Interdite 2</p>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Modale pour l'image agrandie (Lightbox) -->
+    <div id="imageModal" class="fixed inset-0 bg-black bg-opacity-80 backdrop-blur-md hidden items-center justify-center p-4 z-50 transition-opacity duration-300">
+        <div class="relative max-w-4xl max-h-full text-center">
+            <img id="modalImage" src="" alt="Image agrandie" class="rounded-lg shadow-2xl object-contain max-w-full max-h-[85vh]">
+            <p id="modalCaption" class="text-white mt-3 text-lg font-medium"></p>
+            <button id="closeImageModalBtn" class="absolute -top-2 -right-2 sm:top-2 sm:right-2 bg-white/20 rounded-full p-1 text-white text-4xl font-light hover:bg-white/30 transition">&times;</button>
         </div>
     </div>
 
@@ -178,6 +187,13 @@
         const locationsModal = document.getElementById('locationsModal');
         const closeModalBtn = document.getElementById('closeModalBtn');
         const modalContent = document.getElementById('modal-content');
+
+        // --- Éléments de la Lightbox ---
+        const imageModal = document.getElementById('imageModal');
+        const modalImage = document.getElementById('modalImage');
+        const modalCaption = document.getElementById('modalCaption');
+        const closeImageModalBtn = document.getElementById('closeImageModalBtn');
+        const locationImages = document.querySelectorAll('.location-image');
 
 
         // --- Gestion du Thème ---
@@ -210,30 +226,56 @@
             applyTheme(prefersDark ? 'dark' : 'light');
         }
 
-        // --- Gestion de la Modale ---
-        function openModal() {
+        // --- Gestion de la Modale des Lieux---
+        function openLocationsModal() {
             locationsModal.classList.remove('hidden');
             locationsModal.classList.add('flex');
-            // Léger délai pour permettre à la transition CSS de s'appliquer
             setTimeout(() => {
                 modalContent.classList.remove('scale-95', 'opacity-0');
             }, 50);
         }
 
-        function closeModal() {
+        function closeLocationsModal() {
             modalContent.classList.add('scale-95', 'opacity-0');
-            // Attendre la fin de la transition avant de cacher la modale
             setTimeout(() => {
                 locationsModal.classList.add('hidden');
                 locationsModal.classList.remove('flex');
             }, 200);
         }
 
-        showLocationsBtn.addEventListener('click', openModal);
-        closeModalBtn.addEventListener('click', closeModal);
+        showLocationsBtn.addEventListener('click', openLocationsModal);
+        closeModalBtn.addEventListener('click', closeLocationsModal);
         locationsModal.addEventListener('click', (event) => {
             if (event.target === locationsModal) {
-                closeModal();
+                closeLocationsModal();
+            }
+        });
+
+        // --- Gestion de la Lightbox ---
+        function openImageModal(src, caption) {
+            modalImage.src = src;
+            modalCaption.textContent = caption;
+            imageModal.classList.remove('hidden');
+            imageModal.classList.add('flex');
+        }
+
+        function closeImageModal() {
+            imageModal.classList.add('hidden');
+            imageModal.classList.remove('flex');
+            modalImage.src = ""; // Clear src to stop loading
+        }
+
+        locationImages.forEach(img => {
+            img.addEventListener('click', () => {
+                const caption = img.nextElementSibling.textContent;
+                openImageModal(img.src, caption);
+            });
+        });
+
+        closeImageModalBtn.addEventListener('click', closeImageModal);
+        imageModal.addEventListener('click', (event) => {
+            if (event.target === imageModal) {
+                closeImageModal();
             }
         });
 
@@ -248,15 +290,13 @@
 
             const totalCapacity = userCapacity + vehicleCapacity;
             
-            // Le poids d'un lot est maintenant calculé dynamiquement
             const weightPerBatch = (EMMENTAL_PER_BATCH * weightEmmental) + (TOMATOES_PER_BATCH * weightTomato);
             
-            if (weightPerBatch <= 0) { // Evite la division par zéro
+            if (weightPerBatch <= 0) { 
                 resultsDiv.innerHTML = `<p class="text-center text-red-500">Le poids des ingrédients ne peut être zéro.</p>`;
                 return;
             }
 
-            // Calcul global
             const maxBatches = Math.floor(totalCapacity / weightPerBatch);
             const maxPizzas = maxBatches * PIZZAS_PER_BATCH;
             const emmentalToHarvest = maxBatches * EMMENTAL_PER_BATCH;
@@ -264,7 +304,6 @@
             const totalHarvestWeight = maxBatches * weightPerBatch;
             const myTotalProfit = maxPizzas * MY_PROFIT_PER_PIZZA;
 
-            // --- Mise à jour de l'affichage ---
             resultsDiv.innerHTML = `
                 <div class="p-4 rounded-xl bg-slate-100 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-700 flex items-center justify-between">
                     <span class="text-gray-600 dark:text-gray-300 font-medium">🍕 Pizzas à fabriquer</span>
